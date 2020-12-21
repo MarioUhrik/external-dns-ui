@@ -1,0 +1,278 @@
+# Copyright (c) 2020 SIGHUP s.r.l All rights reserved.
+# Use of this source code is governed by a BSD-style
+# license that can be found in the LICENSE file.
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: testns
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    forecastle.stakater.com/expose: "true"
+    forecastle.stakater.com/appName: "Grafana"
+    forecastle.stakater.com/icon: "https://github.com/stakater/ForecastleIcons/raw/master/grafana.png"
+  namespace: testns
+  name: grafana
+spec:
+  rules:
+  - host: grafana.testdomain.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: grafana
+          servicePort: http
+  tls:
+    - hosts:
+        - grafana.testdomain.com
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    forecastle.stakater.com/expose: "true"
+    forecastle.stakater.com/appName: "Prometheus"
+    forecastle.stakater.com/icon: "https://github.com/stakater/ForecastleIcons/raw/master/prometheus.png"
+  namespace: testns
+  name: prometheus
+spec:
+  rules:
+  - host: prometheus.testdomain.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: external-dns-ui
+          servicePort: http
+  tls:
+    - hosts:
+        - prometheus.testdomain.com
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    forecastle.stakater.com/expose: "true"
+    forecastle.stakater.com/appName: "Alert Manager"
+    forecastle.stakater.com/icon: "https://github.com/stakater/ForecastleIcons/raw/master/prometheus.png"
+  namespace: testns
+  name: alertmanager
+spec:
+  rules:
+  - host: alertmanager.testdomain.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: external-dns-ui
+          servicePort: http
+  tls:
+    - hosts:
+        - alertmanager.testdomain.com
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  namespace: testns
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    forecastle.stakater.com/expose: "true"
+    forecastle.stakater.com/appName: "Cerebro"
+    forecastle.stakater.com/icon: "https://github.com/stakater/ForecastleIcons/raw/master/cerebro.png"
+  name: cerebro
+spec:
+  rules:
+  - host: cerebro.testdomain.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: external-dns-ui
+          servicePort: http
+  tls:
+    - hosts:
+        - cerebro.testdomain.com
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  namespace: testns
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    forecastle.stakater.com/expose: "true"
+    forecastle.stakater.com/appName: "Kibana"
+    forecastle.stakater.com/icon: "https://github.com/stakater/ForecastleIcons/raw/master/kibana.png"
+  name: kibana
+spec:
+  rules:
+  - host: kibana.testdomain.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: kibana
+          servicePort: http
+  tls:
+    - hosts:
+        - kibana.testdomain.com
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  namespace: testns
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    forecastle.stakater.com/expose: "true"
+    forecastle.stakater.com/appName: "Kubernetes Dashboard"
+    forecastle.stakater.com/icon: "https://github.com/stakater/ForecastleIcons/raw/master/kubernetes.png" 
+    nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+  name: kubernetes-dashboard
+spec:
+  rules:
+  - host: kubernetes.testdomain.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: kubernetes-dashboard
+          servicePort: 8443
+  tls:
+    - hosts:
+        - kubernetes.testdomain.com
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  namespace: testns
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+  name: forecastle
+spec:
+  rules:
+  - host: testdomain.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: external-dns-ui
+          servicePort: http
+  tls:
+    - hosts:
+        - testdomain.com
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  namespace: testns
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    forecastle.stakater.com/expose: "true"
+    forecastle.stakater.com/appName: "Gatekeeper Policy Manager"
+  name: gatekeeper-policy-manager
+spec:
+  rules:
+  - host: gatekeeper.testdomain.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: gatekeeper-policy-manager
+          servicePort: http
+  tls:
+    - hosts:
+        - gatekeeper.testdomain.com
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  namespace: testns
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    forecastle.stakater.com/expose: "true"
+    forecastle.stakater.com/appName: "Gatekeeper Policy Manager"
+  name: gatekeeper-policy-manager-wrong-domain
+spec:
+  rules:
+  - host: gatekeeper.testdomain.wrong.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: gatekeeper-policy-manager
+          servicePort: http
+  tls:
+    - hosts:
+        - gatekeeper.testdomain.wrong.com
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  namespace: testns
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    forecastle.stakater.com/expose: "true"
+    forecastle.stakater.com/appName: "Gatekeeper Policy Manager"
+  name: gatekeeper-policy-manager1
+spec:
+  rules:
+  - host: gatekeeper1.testdomain.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: gatekeeper-policy-manager
+          servicePort: http
+  tls:
+    - hosts:
+        - gatekeeper1.testdomain.com
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  namespace: testns
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    forecastle.stakater.com/expose: "true"
+    forecastle.stakater.com/appName: "Gatekeeper Policy Manager"
+  name: gatekeeper-policy-manager2
+spec:
+  rules:
+  - host: gatekeeper2.testdomain.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: gatekeeper-policy-manager
+          servicePort: http
+  tls:
+    - hosts:
+        - gatekeeper2.testdomain.com
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  namespace: testns
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    forecastle.stakater.com/expose: "true"
+    forecastle.stakater.com/appName: "Gatekeeper Policy Manager"
+  name: gatekeeper-policy-manager3
+spec:
+  rules:
+  - host: gatekeeper3.testdomain.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: gatekeeper-policy-manager
+          servicePort: http
+  tls:
+    - hosts:
+        - gatekeeper3.testdomain.com

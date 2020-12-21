@@ -1,0 +1,17 @@
+# Copyright (c) 2020 SIGHUP s.r.l All rights reserved.
+# Use of this source code is governed by a BSD-style
+# license that can be found in the LICENSE file.
+
+namespace: external-dns # please specify - should be the same as the namespace with external-dns in it
+
+resources:
+  - rbac.yaml
+  - deployment.yaml
+  - service.yaml
+  # Uncomment the following line to create an ingress if you want to expose the
+  # the app to the outside. Remember to edit the file and set the host accordingly.
+  # - ingress.yaml
+
+images:
+  - name: mariouhrik/external-dns-ui
+    newTag: latest

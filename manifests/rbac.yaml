@@ -1,0 +1,65 @@
+# Copyright (c) 2020 SIGHUP s.r.l All rights reserved.
+# Use of this source code is governed by a BSD-style
+# license that can be found in the LICENSE file.
+
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: external-dns-ui
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: external-dns-ui
+rules:
+- apiGroups:
+  - extensions
+  resources:
+  - ingresses
+  verbs:
+  - get
+  - list
+  - watch
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: external-dns-ui
+rules:
+- apiGroups:
+  - extensions
+  - ""
+  resources:
+  - deployments
+  - pods
+  - pods/log
+  verbs:
+  - get
+  - list
+  - watch
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: external-dns-ui
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: external-dns-ui
+subjects:
+- kind: ServiceAccount
+  name: external-dns-ui
+  namespace: external-dns # please specify - should be the same as the namespace with external-dns in it
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: external-dns-ui
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: external-dns-ui
+subjects:
+- kind: ServiceAccount
+  name: external-dns-ui
+  namespace: external-dns # please specify - should be the same as the namespace with external-dns in it

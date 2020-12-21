@@ -1,0 +1,20 @@
+<!--
+ Copyright (c) 2020 SIGHUP s.r.l All rights reserved.
+ Use of this source code is governed by a BSD-style
+ license that can be found in the LICENSE file.
+-->
+
+{% extends "base.html" %}
+{% block sidebar %}
+Ingress reachability status:
+  {% for hostname in hostname_statuses %}
+  <a class="item" href="http://{{ hostname }}">
+    <div class="ui small {% if hostname_statuses[hostname] == false %} red {%else%} green {% endif %} label">{% if hostname_statuses[hostname] == false %} unreachable {%else%} reachable {% endif %}</div>
+    {{ hostname }}
+    </a>
+  {% endfor %}
+{% endblock %}
+{% block content %}
+Status of external-dns:
+  <div class="ui medium {% if up_to_date == false %} red {%else%} green {% endif %} label">{% if up_to_date == false %} Out of sync {%else%} In Sync {% endif %}</div>
+{% endblock %}

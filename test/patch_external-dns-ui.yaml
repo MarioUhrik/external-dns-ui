@@ -1,0 +1,16 @@
+# Copyright (c) 2020 SIGHUP s.r.l All rights reserved.
+# Use of this source code is governed by a BSD-style
+# license that can be found in the LICENSE file.
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: external-dns-ui
+spec:
+  template:
+    spec:
+      containers:
+      - name: external-dns-ui
+        env:
+        - name: EDUI_LOG_LEVEL
+          value: DEBUG

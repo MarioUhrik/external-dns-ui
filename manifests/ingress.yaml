@@ -1,0 +1,18 @@
+# Copyright (c) 2020 SIGHUP s.r.l All rights reserved.
+# Use of this source code is governed by a BSD-style
+# license that can be found in the LICENSE file.
+
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: external-dns-ui
+spec:
+  rules:
+  # Set the HOST accordingly
+  - host: edui.internal.mycompany.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: external-dns-ui
+          servicePort: http

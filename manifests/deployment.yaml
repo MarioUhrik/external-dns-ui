@@ -1,0 +1,47 @@
+# Copyright (c) 2020 SIGHUP s.r.l All rights reserved.
+# Use of this source code is governed by a BSD-style
+# license that can be found in the LICENSE file.
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: external-dns-ui
+spec:
+  selector:
+    matchLabels:
+      app: external-dns-ui
+  template:
+    metadata:
+      labels:
+        app: external-dns-ui
+    spec:
+      serviceAccountName: external-dns-ui
+      containers:
+      - name: external-dns-ui
+        image: mariouhrik/external-dns-ui
+        imagePullPolicy: Always
+        env:
+        - name: EDUI_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "100m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+        readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+        ports:
+        - containerPort: 8080
+          name: http
+        securityContext:
+          privileged: false
